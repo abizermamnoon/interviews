@@ -36,36 +36,36 @@ def req(value1: str, value2: str):
   
   return r.json()
 
-# encode start and end date in start and end
+# encode start and end date in start and end https://towardsdev.com/fred-api-get-us-economic-data-using-python-e51ac8e7b1cc
 start = datetime.datetime(2000,1,1)
 end   =  datetime.datetime(2020,1,1)
 
-# creates a data frame of the different datasets in fred between 2000 and 2020
+# creates a data frame of the different datasets in fred between 2000 and 2020 https://towardsdev.com/fred-api-get-us-economic-data-using-python-e51ac8e7b1cc
 df = pdr.DataReader(['PAYEMS','CPIAUCSL','GDPC1'],'fred',start,end)
-# Rename the columns in dataframe
+# Rename the columns in dataframe https://www.geeksforgeeks.org/how-to-rename-columns-in-pandas-dataframe/
 df = df.rename(columns = {'PAYEMS': 'Quarterly Total Nonfarm Employment',
                            'CPIAUCSL': 'Quarterly Consumer Price Index',
                             'GDPC1' : 'Real GDP'
                             })
 display(df)
-#Convert dataframe to csv file
+#Convert dataframe to csv file https://towardsdatascience.com/how-to-export-pandas-dataframe-to-csv-2038e43d9c03
 df.to_csv('economic_indicators.csv')
 
 # Import plotly graph objects
 import plotly.graph_objects as go 
 from plotly.subplots import make_subplots
 
-#Create histogram of quarterly CPI
+#Create histogram of quarterly CPI https://plotly.com/python/histograms/
 Histogram = px.histogram(df, x = 'Quarterly Consumer Price Index')
 Histogram.show()
 
-# Create scatterplot of Total Nonfarm Employment Vs Quarterly CPI
+# Create scatterplot of Total Nonfarm Employment Vs Quarterly CPI https://www.sharpsightlabs.com/blog/plotly-scatter-plot/
 Scatterplot2 = px.scatter(data_frame = df,
             x = 'Quarterly Total Nonfarm Employment',
             y = 'Quarterly Consumer Price Index')
 Scatterplot2.show()
 
-#Create a two y-axes time series plot
+#Create a two y-axes time series plot https://plotly.com/python/multiple-axes/
 fig = make_subplots(specs = [[{"secondary_y": True}]])
 # Add y axis with scale of Nonfarm Employment
 fig.add_trace(
