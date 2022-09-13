@@ -43,9 +43,9 @@ end   =  datetime.datetime(2020,1,1)
 # creates a data frame of the different datasets in fred between 2000 and 2020 https://towardsdev.com/fred-api-get-us-economic-data-using-python-e51ac8e7b1cc
 df = pdr.DataReader(['PAYEMS','CPIAUCSL','GDPC1'],'fred',start,end)
 # Rename the columns in dataframe https://www.geeksforgeeks.org/how-to-rename-columns-in-pandas-dataframe/
-df = df.rename(columns = {'PAYEMS': 'Quarterly Total Nonfarm Employment',
-                           'CPIAUCSL': 'Quarterly Consumer Price Index',
-                            'GDPC1' : 'Real GDP'
+df = df.rename(columns = {'PAYEMS': 'Quarterly_Total_Nonfarm_Employment',
+                           'CPIAUCSL': 'Quarterly_Consumer_Price_Index',
+                            'GDPC1' : 'Real_GDP'
                             })
 display(df)
 #Convert dataframe to csv file https://towardsdatascience.com/how-to-export-pandas-dataframe-to-csv-2038e43d9c03
@@ -55,29 +55,32 @@ df.to_csv('economic_indicators.csv')
 import plotly.graph_objects as go 
 from plotly.subplots import make_subplots
 
+# Create scatterplot of Real GDP vs Quarterly CPI
+Scatterplot = px.scatter(data_frame = df,
+            x = 'Real_GDP',
+            y = 'Quarterly_Consumer_Price_Index')
+Scatterplot.show()
+
 #Create histogram of quarterly CPI https://plotly.com/python/histograms/
-Histogram = px.histogram(df, x = 'Quarterly Consumer Price Index')
+Histogram = px.histogram(df, x = 'Quarterly_Consumer_Price_Index')
 Histogram.show()
 
 # Create scatterplot of Total Nonfarm Employment Vs Quarterly CPI https://www.sharpsightlabs.com/blog/plotly-scatter-plot/
 Scatterplot2 = px.scatter(data_frame = df,
-            x = 'Quarterly Total Nonfarm Employment',
-            y = 'Quarterly Consumer Price Index')
+            x = 'Quarterly_Total_Nonfarm_Employment',
+            y = 'Quarterly_Consumer_Price_Index')
 Scatterplot2.show()
 
 #Create a two y-axes time series plot https://plotly.com/python/multiple-axes/
 fig = make_subplots(specs = [[{"secondary_y": True}]])
 # Add y axis with scale of Nonfarm Employment
 fig.add_trace(
-    go.Scatter(data_frame = df, x = 'date', y = 'Quarterly Total Nonfarm Employment', 
-            name = "Quarterly Total Nonfarm Employment"), secondary_y = False)
+    go.Scatter(data_frame = df, x = 'DATE', y = 'Quarterly_Total_Nonfarm_Employment', 
+               name = 'Quarterly_Total_Nonfarm_Employment'), secondary_y = False)
 # Add y axis with scale of Real GDP
 fig.add_trace(
-    go.Scatter(data_frame = df, x = 'date ', y = 'Real GDP', 
+    go.Scatter(data_frame = df, x = 'DATE' , y = 'Real_GDP', 
            name = "Real GDP"), secondary_y = True)
 fig.update_layout( title_text = "Real GDP VS Total Nonfarm Employment")
-# Create scatterplot of Real GDP vs Quarterly CPI
-Scatterplot = px.scatter(data_frame = df,
-            x = 'Real GDP',
-            y = 'Quarterly Consumer Price Index')
-Scatterplot.show()
+fig.show()
+
